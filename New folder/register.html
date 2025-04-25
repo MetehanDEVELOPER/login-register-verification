@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efatra | Kayıt Ol</title>
+    <link rel="icon" href="../images/icon.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('../images/Efatra banner 1.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            z-index: 0;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-container h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .login-container input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 8px rgba(255, 107, 107, 0.4);
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .login-container button:hover {
+            background: #ee5253;
+            transform: translateY(-2px);
+        }
+
+        .login-container .link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .login-container .link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .password-warning {
+            color: #ffffff;
+            font-size: 12px;
+            text-align: left;
+            margin: 5px 0 0 5px;
+            opacity: 0.9;
+            background: rgba(255, 99, 99, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border-left: 3px solid rgba(255, 99, 99, 0.5);
+            display: none; /* Başlangıçta gizli */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>✨ Kayıt Ol</h2>
+        <form id="registerForm">
+            <input type="email" id="email" placeholder="📧 E-posta" required />
+            <input type="text" id="username" placeholder="👤 Kullanıcı Adı" required />
+            <p class="password-warning" id="lengthWarning">
+                ⚠️ Şifre en az 6 karakter uzunluğunda olmalıdır.
+            </p>
+            <input type="password" id="password" placeholder="🔒 Şifre" required />
+            <p class="password-warning" id="matchWarning">
+                ⚠️ Şifreler uyuşmuyor!
+            </p>
+            <input type="password" id="confirmPassword" placeholder="🔑 Şifreyi Onayla" required />
+            <button type="submit">
+                <i class="fas fa-user-plus"></i>Aramıza Katıl
+            </button>
+        </form>
+        <a href="/auth/login" class="link">
+            <i class="fas fa-sign-in-alt"></i>Zaten hesabın var mı? Giriş yap
+        </a>
+    </div>
+
+    <script>
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const lengthWarning = document.getElementById("lengthWarning");
+        const matchWarning = document.getElementById("matchWarning");
+
+        // Şifre uzunluğunu kontrol et
+        password.addEventListener("input", () => {
+            if (password.value.length < 6) {
+                lengthWarning.style.display = "block";
+            } else {
+                lengthWarning.style.display = "none";
+            }
+        });
+
+        // Şifrelerin eşleşmesini kontrol et
+        confirmPassword.addEventListener("input", () => {
+            if (password.value !== confirmPassword.value) {
+                matchWarning.style.display = "block";
+            } else {
+                matchWarning.style.display = "none";
+            }
+        });
+
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password.length < 6) {
+                lengthWarning.style.display = "block";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                matchWarning.style.display = "block";
+                return;
+            }
+
+            const response = await fetch("/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, username, password })
+            });
+
+            const data = await response.json();
+            if (data) {
+                if (data.success) {
+                    document.querySelector('.login-container').innerHTML = "<h2>Hesabınızı doğrulamak için kodu ve bağlantıyı e-posta adresinize gönderdik! 🌟</h2>";
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
